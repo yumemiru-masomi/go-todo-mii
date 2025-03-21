@@ -41,6 +41,29 @@ export default function TodoPage() {
     fetchTodos();
   };
 
+  const handleToggleCompleted = async (todo: Todo) => {
+    await fetch(`http://localhost:8090/todos/${todo.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: todo.title,
+        completed: !todo.completed,
+      }),
+    });
+
+    fetchTodos();
+  };
+
+  const handleDeleteTodo = async (todo: Todo) => {
+    await fetch(`http://localhost:8090/todos/${todo.id}`, {
+      method: "DELETE",
+    });
+
+    fetchTodos();
+  };
+
   return (
     <div className="p-6 max-w-2xl mx-auto">
       <h1 className="text-2xl font-semibold text-center text-white mb-6">
@@ -71,16 +94,24 @@ export default function TodoPage() {
             className="flex justify-between items-center p-4 bg-gray-800 border border-gray-700 rounded-xl shadow-sm hover:shadow-md transition"
           >
             <span className="text-lg font-medium text-white">{todo.title}</span>
-            <span
-              className={`px-3 py-1 rounded-full text-sm font-semibold
-            ${
-              todo.completed
-                ? "bg-green-600 text-white"
-                : "bg-yellow-500 text-black"
-            }`}
-            >
-              {todo.completed ? "✅ 完了" : "💭 未完了"}
-            </span>
+            <div>
+              <button
+                onClick={() => handleToggleCompleted(todo)}
+                className={`px-3 py-1 rounded-full text-sm font-semibold${
+                  todo.completed
+                    ? "bg-green-600 text-white"
+                    : "bg-yellow-500 text-white"
+                }`}
+              >
+                {todo.completed ? "✅ 完了" : "💭 未完了"}
+              </button>
+              <button
+                onClick={() => handleDeleteTodo(todo)}
+                className={`px-3 py-1 rounded-full text-sm font-semibold text-white`}
+              >
+                削除
+              </button>
+            </div>
           </li>
         ))}
       </ul>
