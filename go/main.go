@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -97,8 +98,9 @@ func deleteTodo(c *gin.Context){
 
 func main() {
 	r := gin.Default()
-	initDB()
+	r.Use(cors.Default())
 
+	initDB()
 	// 新規追加
 	r.POST("/todos", createTodo)
 
